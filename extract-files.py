@@ -41,6 +41,10 @@ lib_fixups: lib_fixups_user_type = {
 }
 
 blob_fixups: blob_fixups_user_type = {
+    'product/priv-app/MiuiCamera/MiuiCamera.apk': blob_fixup()
+        .apktool_patch('patches/MiuiCamera'),
+    'system/lib64/libmicampostproc_client.so': blob_fixup()
+        .remove_needed('libhidltransport.so'),
     'system_ext/etc/init/qspa_system.rc': blob_fixup()
         .regex_replace(r'\$\{ro\.boot\.vendor\.qspa:-default\}', 'default'),
     'system_ext/lib64/vendor.qti.hardware.qccsyshal@1.2-halimpl.so': blob_fixup()

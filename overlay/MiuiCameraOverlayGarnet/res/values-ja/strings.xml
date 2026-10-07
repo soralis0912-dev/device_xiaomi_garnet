@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: WitAqua
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <string name="gb3">「%1$s」シーンをオンにする</string>
+    <string name="gss">よく使う機能を上部バーにドラッグ</string>
+    <string name="g3z">カメラの権限が制限されています</string>
+    <string name="f_f">シネマティックモード</string>
+    <string name="fnr">カメラのガイドアニメーション</string>
+    <string name="fl9">2 本指でピンチするとズームできます</string>
+    <string name="f6x">アクセサリ</string>
+    <string name="g9f">撮影グリップ</string>
+    <string name="gbo">タッチフォーカスのタイムアウトを延長</string>
+    <string name="gby">録画中のスムーズズーム</string>
+    <string name="ggf">録画中のタイマー撮影</string>
+    <string name="ggi">録画中の静止画撮影 (DUMP NDD)</string>
+</resources>

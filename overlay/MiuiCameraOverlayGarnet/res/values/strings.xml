@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: WitAqua
+     SPDX-License-Identifier: Apache-2.0
+-->
+<!-- MiuiCamera 6.2.000870.5 carries these only in Chinese, in the default
+     configuration and at most zh-rCN. The names are obfuscated and change
+     with every apk version; they were matched to the Chinese text with
+     aapt2 dump resources. The lunar calendar and zodiac tables it also
+     leaves untranslated are deliberately not here. -->
+<resources>
+    <!-- Tip under the shutter when a scene is detected -->
+    <string name="gb3">Turn on the \"%1$s\" scene</string>
+    <!-- Top bar editor -->
+    <string name="gss">Drag the features you use onto the top bar</string>
+    <!-- Toast on a restricted permission. Stock says "contact R&amp;D",
+         which is not useful to anyone holding the phone. -->
+    <string name="g3z">Camera permissions are restricted</string>
+    <string name="f_f">Cinematic mode</string>
+    <string name="fnr">Camera guide animation</string>
+    <string name="fl9">Pinch with two fingers to zoom</string>
+    <string name="f6x">Accessories</string>
+    <string name="g9f">Camera grip</string>
+    <!-- Advanced settings -->
+    <string name="gbo">Extend the touch-to-focus timeout</string>
+    <string name="gby">Smooth zoom while recording</string>
+    <string name="ggf">Timed shots while recording</string>
+    <string name="ggi">Take a photo while recording (DUMP NDD)</string>
+</resources>

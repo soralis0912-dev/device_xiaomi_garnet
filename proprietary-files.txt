@@ -1495,6 +1495,24 @@ vendor/lib64/liblistensoundmodel2vendor.so
 vendor/lib64/vendor.qti.hardware.ListenSoundModel@1.0-impl.so
 vendor/lib64/vendor.qti.hardware.ListenSoundModel@1.0.so
 
+# MIUI Camera
+#
+# com.android.camera 6.2.000870.5, from the same firmware as the rest of
+# these blobs, which it talks to through xiaomi vendor tags. Not PRESIGNED
+# because patches/MiuiCamera rebuilds it, so the build signs it with the
+# platform key; it checks neither its own signature nor a sharedUserId.
+#
+# The jni libraries are loaded by name from the app's classloader, so they
+# go to /system and are named in configs/public.libraries-xiaomi.txt.
+# libcamera_algoup_jni dlopens /system/lib64/libmicampostproc_client.so by
+# absolute path; without it MiCameraAlgo.init() throws and the app dies.
+product/priv-app/MiuiCamera/MiuiCamera.apk
+product/priv-app/ExtraPhotoGlobal/ExtraPhotoGlobal.apk;PRESIGNED
+system_ext/lib64/libcamera_algoup_jni.xiaomi.so:system/lib64/libcamera_algoup_jni.xiaomi.so
+system_ext/lib64/libcamera_mianode_jni.xiaomi.so:system/lib64/libcamera_mianode_jni.xiaomi.so
+system_ext/lib64/libmicampostproc_client.so:system/lib64/libmicampostproc_client.so
+system_ext/lib64/vendor.xiaomi.hardware.campostproc@1.0.so:system/lib64/vendor.xiaomi.hardware.campostproc@1.0.so;MODULE_SUFFIX=_system
+
 # Media
 vendor/bin/hw/vendor.qti.media.c2@1.0-service
 vendor/bin/hw/vendor.qti.media.c2audio@1.0-service

@@ -1,0 +1,72 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: soralis0912 <soralis.nem@gmail.com>
+Date: Wed, 7 Oct 2026 16:18:45 +0900
+Subject: [PATCH] Always offer the shutter sound setting
+
+The camera hides the shutter sound preference and forces the sound on
+when the region, or failing that the locale, is KR or JP. The check is
+Lw7/b;->y()Z in 6.2.000870.5; it is read by the settings fragment, the
+settings search provider and the two sound players, so returning false
+there both shows the preference and stops forcing the sound.
+---
+ smali_classes3/w7/b.smali | 46 ++-------------------------------------
+ 1 file changed, 2 insertions(+), 44 deletions(-)
+
+diff --git a/smali_classes3/w7/b.smali b/smali_classes3/w7/b.smali
+index 5c41309a..aec18ff7 100644
+--- a/smali_classes3/w7/b.smali
++++ b/smali_classes3/w7/b.smali
+@@ -4282,51 +4282,9 @@
+ .method public final y()Z
+     .locals 1
+ 
+-    invoke-virtual {p0}, Lw7/b;->x()Z
+-
+-    move-result p0
+-
+-    if-nez p0, :cond_1
+-
+-    sget-object p0, Lj6/b;->c0:Ljava/lang/String;
+-
+-    invoke-static {p0}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
+-
+-    move-result p0
+-
+-    if-nez p0, :cond_0
+-
+-    sget-object p0, Lj6/b;->c0:Ljava/lang/String;
+-
+-    goto :goto_0
+-
+-    :cond_0
+-    invoke-static {}, Ljava/util/Locale;->getDefault()Ljava/util/Locale;
+-
+-    move-result-object p0
+-
+-    invoke-virtual {p0}, Ljava/util/Locale;->getCountry()Ljava/lang/String;
+-
+-    move-result-object p0
+-
+-    :goto_0
+-    sget-object v0, Lj6/b;->b0:Ljava/util/List;
+-
+-    invoke-interface {v0, p0}, Ljava/util/List;->contains(Ljava/lang/Object;)Z
+-
+-    move-result p0
+-
+-    if-eqz p0, :cond_1
+-
+-    const/4 p0, 0x1
+-
+-    goto :goto_1
+-
+-    :cond_1
+-    const/4 p0, 0x0
++    const/4 v0, 0x0
+ 
+-    :goto_1
+-    return p0
++    return v0
+ .end method
+ 
+ .method public final y0()Z

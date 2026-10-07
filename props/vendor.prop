@@ -70,6 +70,12 @@ camera.disable_zsl_mode=true
 ro.camera.enableCamera1MaxZsl=1
 ro.hardware.camera=xiaomi
 
+# The framework only lets the packages named here use the vendor session
+# parameters and stream sizes MiuiCamera configures. Stock names Snapcam.
+# vendor.camera.aux.packagelist is left unset on purpose: with it unset
+# every app sees every camera, Aperture included.
+persist.vendor.camera.privapp.list=com.android.camera
+
 # Chipset
 ro.soc.manufacturer=QTI
 

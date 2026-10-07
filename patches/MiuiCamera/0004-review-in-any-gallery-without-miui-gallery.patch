@@ -1,0 +1,49 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: soralis0912 <soralis.nem@gmail.com>
+Date: Wed, 7 Oct 2026 16:20:27 +0900
+Subject: [PATCH] Review captures in any gallery when MIUI Gallery is absent
+
+The thumbnail sends com.android.camera.action.REVIEW to com.miui.gallery
+only. Without that package the launch throws and the camera falls back
+to a plain ACTION_VIEW, which loses the camera roll. Send the platform
+android.provider.action.REVIEW to whichever gallery handles it instead.
+MIUI Gallery is still used when it is installed.
+---
+ smali/A/b3.smali | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/smali/A/b3.smali b/smali/A/b3.smali
+index a1c56058..a9497c8c 100644
+--- a/smali/A/b3.smali
++++ b/smali/A/b3.smali
+@@ -140,12 +140,30 @@
+     :goto_0
+     const-string p2, "com.miui.gallery"
+ 
++    :try_start_gallery
++    invoke-virtual {p0}, Landroid/app/Activity;->getPackageManager()Landroid/content/pm/PackageManager;
++
++    move-result-object v5
++
++    invoke-virtual {v5, p2, v4}, Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String;I)Landroid/content/pm/PackageInfo;
++    :try_end_gallery
++    .catch Landroid/content/pm/PackageManager$NameNotFoundException; {:try_start_gallery .. :try_end_gallery} :catch_no_gallery
++
+     invoke-virtual {v1, p2}, Landroid/content/Intent;->setPackage(Ljava/lang/String;)Landroid/content/Intent;
+ 
+     const-string p2, "from_MiuiCamera"
+ 
+     invoke-virtual {v1, p2, v2}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Z)Landroid/content/Intent;
+ 
++    goto :goto_1
++
++    :catch_no_gallery
++    move-exception v5
++
++    const-string p2, "android.provider.action.REVIEW"
++
++    invoke-virtual {v1, p2}, Landroid/content/Intent;->setAction(Ljava/lang/String;)Landroid/content/Intent;
++
+     :goto_1
+     invoke-virtual {v0}, Lw7/b;->a()Z
+ 

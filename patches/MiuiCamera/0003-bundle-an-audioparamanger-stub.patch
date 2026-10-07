@@ -1,0 +1,364 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: soralis0912 <soralis.nem@gmail.com>
+Date: Wed, 7 Oct 2026 16:19:17 +0900
+Subject: [PATCH] Bundle an AudioParaManger stub for the video recorder
+
+The video modes construct android.media.AudioParaManger and implement
+its listener interfaces. Stock gets the class from MIUI's
+miui-framework.jar on the boot classpath, which is absent here, so the
+recorder hits NoClassDefFoundError. Ship the class inside the APK, next
+to the android.media.MediaCinematic it already carries. init() fails as
+it does on stock hardware without the audio zoom effect, and recording
+falls back to plain audio.
+
+It goes in classes5, the dex with the most room under the 64K limit.
+---
+ .../media/AudioParaManger$EventListener.smali |  25 ++
+ .../media/AudioParaManger$TuneListener.smali  |  22 ++
+ .../android/media/AudioParaManger.smali       | 276 ++++++++++++++++++
+ 3 files changed, 323 insertions(+)
+ create mode 100644 smali_classes5/android/media/AudioParaManger$EventListener.smali
+ create mode 100644 smali_classes5/android/media/AudioParaManger$TuneListener.smali
+ create mode 100644 smali_classes5/android/media/AudioParaManger.smali
+
+diff --git a/smali_classes5/android/media/AudioParaManger$EventListener.smali b/smali_classes5/android/media/AudioParaManger$EventListener.smali
+new file mode 100644
+index 00000000..7f0aa1eb
+--- /dev/null
++++ b/smali_classes5/android/media/AudioParaManger$EventListener.smali
+@@ -0,0 +1,25 @@
++.class public interface abstract Landroid/media/AudioParaManger$EventListener;
++.super Ljava/lang/Object;
++.source "AudioParaManger.java"
++
++
++# annotations
++.annotation system Ldalvik/annotation/EnclosingClass;
++    value = Landroid/media/AudioParaManger;
++.end annotation
++
++.annotation system Ldalvik/annotation/InnerClass;
++    accessFlags = 0x609
++    name = "EventListener"
++.end annotation
++
++
++# virtual methods
++.method public onAudioLevel(II)V
++    .registers 3
++
++    return-void
++.end method
++
++.method public abstract onMicBlocking(II)V
++.end method
+diff --git a/smali_classes5/android/media/AudioParaManger$TuneListener.smali b/smali_classes5/android/media/AudioParaManger$TuneListener.smali
+new file mode 100644
+index 00000000..f8d54e13
+--- /dev/null
++++ b/smali_classes5/android/media/AudioParaManger$TuneListener.smali
+@@ -0,0 +1,22 @@
++.class public interface abstract Landroid/media/AudioParaManger$TuneListener;
++.super Ljava/lang/Object;
++.source "AudioParaManger.java"
++
++
++# annotations
++.annotation system Ldalvik/annotation/EnclosingClass;
++    value = Landroid/media/AudioParaManger;
++.end annotation
++
++.annotation system Ldalvik/annotation/InnerClass;
++    accessFlags = 0x609
++    name = "TuneListener"
++.end annotation
++
++
++# virtual methods
++.method public abstract onTuneAudioData([B)V
++.end method
++
++.method public abstract onTuneCtrlData([B)V
++.end method
+diff --git a/smali_classes5/android/media/AudioParaManger.smali b/smali_classes5/android/media/AudioParaManger.smali
+new file mode 100644
+index 00000000..cff661b1
+--- /dev/null
++++ b/smali_classes5/android/media/AudioParaManger.smali
+@@ -0,0 +1,276 @@
++.class public Landroid/media/AudioParaManger;
++.super Ljava/lang/Object;
++.source "AudioParaManger.java"
++
++
++# annotations
++.annotation system Ldalvik/annotation/MemberClasses;
++    value = {
++        Landroid/media/AudioParaManger$EventListener;,
++        Landroid/media/AudioParaManger$TuneListener;
++    }
++.end annotation
++
++
++# static fields
++.field public static final NONE:I = 0x0
++
++.field private static final TAG:Ljava/lang/String; = "AudioParaManger"
++
++
++# direct methods
++.method public constructor <init>(Landroid/media/AudioRecord;Landroid/content/Context;)V
++    .registers 3
++
++    .line 31
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    .line 32
++    const-string p0, "AudioParaManger"
++
++    const-string p1, "audio zoom is not available"
++
++    invoke-static {p0, p1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
++
++    return-void
++.end method
++
++.method public constructor <init>(Landroid/media/MediaRecorder;Landroid/content/Context;)V
++    .registers 3
++
++    .line 27
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    .line 28
++    const-string p0, "AudioParaManger"
++
++    const-string p1, "audio zoom is not available"
++
++    invoke-static {p0, p1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
++
++    return-void
++.end method
++
++.method public static isAudioZoomSupported(Landroid/content/Context;)Z
++    .registers 1
++
++    const/4 p0, 0x0
++
++    return p0
++.end method
++
++
++# virtual methods
++.method public creatOzoEffect(I)Z
++    .registers 2
++
++    const/4 p0, 0x0
++
++    return p0
++.end method
++
++.method public createAudioEffects(I)Z
++    .registers 2
++
++    const/4 p0, 0x0
++
++    return p0
++.end method
++
++.method public createAudioObject(Landroid/media/AudioParaManger$EventListener;)V
++    .registers 2
++
++    return-void
++.end method
++
++.method public createAudioObject(Landroid/media/AudioParaManger$EventListener;Landroid/media/AudioParaManger$TuneListener;)V
++    .registers 3
++
++    return-void
++.end method
++
++.method public createOzo(Landroid/media/AudioParaManger$EventListener;)V
++    .registers 2
++
++    return-void
++.end method
++
++.method public createOzo(Landroid/media/AudioParaManger$EventListener;Landroid/media/AudioParaManger$TuneListener;)V
++    .registers 3
++
++    return-void
++.end method
++
++.method public getAudioConfig()[I
++    .registers 1
++
++    const/4 p0, 0x0
++
++    return-object p0
++.end method
++
++.method public getAudioLatency()F
++    .registers 1
++
++    const/4 p0, 0x0
++
++    return p0
++.end method
++
++.method public init(IIIDDDDDZ)Z
++    .registers 15
++
++    const/4 p0, 0x0
++
++    return p0
++.end method
++
++.method public isUnite()Z
++    .registers 1
++
++    const/4 p0, 0x0
++
++    return p0
++.end method
++
++.method public prepare()V
++    .registers 1
++
++    return-void
++.end method
++
++.method public releaseAudioEffect()V
++    .registers 1
++
++    return-void
++.end method
++
++.method public releaseOzoEffect()V
++    .registers 1
++
++    return-void
++.end method
++
++.method public setAudioFocusAzimuth(D)V
++    .registers 3
++
++    return-void
++.end method
++
++.method public setAudioFocusAzimuth(DI)V
++    .registers 4
++
++    return-void
++.end method
++
++.method public setAudioFocusElevation(D)V
++    .registers 3
++
++    return-void
++.end method
++
++.method public setAudioFocusElevation(DI)V
++    .registers 4
++
++    return-void
++.end method
++
++.method public setAudioFocusHeight(D)V
++    .registers 3
++
++    return-void
++.end method
++
++.method public setAudioFocusWidth(D)V
++    .registers 3
++
++    return-void
++.end method
++
++.method public setAudioWindNoise(Z)V
++    .registers 2
++
++    return-void
++.end method
++
++.method public setAudioZoom(IZ)V
++    .registers 3
++
++    return-void
++.end method
++
++.method public setAudioZoomLevel(D)V
++    .registers 3
++
++    return-void
++.end method
++
++.method public setFocusRegion(IIII)I
++    .registers 5
++
++    const/4 p0, 0x0
++
++    return p0
++.end method
++
++.method public setFocusRegion(IIIII)I
++    .registers 6
++
++    const/4 p0, 0x0
++
++    return p0
++.end method
++
++.method public setMaxSupportLevel(I)V
++    .registers 2
++
++    return-void
++.end method
++
++.method public setRecordType(I)V
++    .registers 2
++
++    return-void
++.end method
++
++.method public setSensorAngleRange(I)I
++    .registers 2
++
++    const/4 p0, 0x0
++
++    return p0
++.end method
++
++.method public setUserGain(D)V
++    .registers 3
++
++    return-void
++.end method
++
++.method public setUserMode(Z)V
++    .registers 2
++
++    return-void
++.end method
++
++.method public setViewRegion(IIII)I
++    .registers 5
++
++    const/4 p0, 0x0
++
++    return p0
++.end method
++
++.method public setViewRegion(IIIII)I
++    .registers 6
++
++    const/4 p0, 0x0
++
++    return p0
++.end method
++
++.method public start()V
++    .registers 1
++
++    return-void
++.end method

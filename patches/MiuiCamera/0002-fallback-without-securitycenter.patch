@@ -1,0 +1,54 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: soralis0912 <soralis.nem@gmail.com>
+Date: Wed, 7 Oct 2026 16:18:56 +0900
+Subject: [PATCH] Use the global CTA strategy without SecurityCenter
+
+The CN and KR permission strategies hand off to com.miui.securitycenter,
+which is not installed here. The request then throws
+ActivityNotFoundException and the runtime permission flow never runs.
+Pick the existing global strategy whenever that package is absent.
+---
+ .../com/xiaomi/camera/cta/requester/c.smali   | 29 ++++++++++++++++++-
+ 1 file changed, 28 insertions(+), 1 deletion(-)
+
+diff --git a/smali_classes4/com/xiaomi/camera/cta/requester/c.smali b/smali_classes4/com/xiaomi/camera/cta/requester/c.smali
+index 729169c8..3009d05e 100644
+--- a/smali_classes4/com/xiaomi/camera/cta/requester/c.smali
++++ b/smali_classes4/com/xiaomi/camera/cta/requester/c.smali
+@@ -31,8 +31,35 @@
+ .end method
+ 
+ .method public static a()Lcom/xiaomi/camera/cta/requester/c$c;
+-    .locals 2
++    .locals 3
++
++    :try_start_securitycenter
++    invoke-static {}, Lcom/xiaomi/camera/basic/Global;->getContext()Landroid/content/Context;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
++
++    move-result-object v0
++
++    const-string v1, "com.miui.securitycenter"
++
++    const/4 v2, 0x0
++
++    invoke-virtual {v0, v1, v2}, Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String;I)Landroid/content/pm/PackageInfo;
++    :try_end_securitycenter
++    .catch Landroid/content/pm/PackageManager$NameNotFoundException; {:try_start_securitycenter .. :try_end_securitycenter} :catch_no_securitycenter
++
++    goto :securitycenter_available
++
++    :catch_no_securitycenter
++    move-exception v0
++
++    sget-object v0, Lcom/xiaomi/camera/cta/requester/c$c;->c:Lcom/xiaomi/camera/cta/requester/c$c;
++
++    return-object v0
+ 
++    :securitycenter_available
+     sget-object v0, Lj6/b;->c0:Ljava/lang/String;
+ 
+     if-nez v0, :cond_0

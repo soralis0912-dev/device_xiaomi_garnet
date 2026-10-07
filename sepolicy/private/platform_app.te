@@ -1,0 +1,12 @@
+# MiuiCamera fetches its Panorama, Movie and other modes from Xiaomi's CDN on
+# first use as Qigsaw splits (every entry in assets/qigsaw_5.0.0.0_2.0.json
+# has builtIn false), unpacks them into its own data directory and dlopens
+# their native libraries from there. It is platform-signed here, and
+# platform_app may not execute from its data directory, so the load fails
+# with "couldn't map ... Permission denied", Qigsaw deletes the split and
+# exits, and the download looks as if it never finishes.
+#
+# Stock's plat_sepolicy grants platform_app exactly these two rules. The W^X
+# neverallow covers all_untrusted_apps only.
+allow platform_app app_data_file:file { getattr map execute execute_no_trans };
+allow platform_app privapp_data_file:file { read getattr map execute open };

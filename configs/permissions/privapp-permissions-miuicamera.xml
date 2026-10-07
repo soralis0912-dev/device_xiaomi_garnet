@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: WitAqua
+     SPDX-License-Identifier: Apache-2.0
+-->
+<!-- Computed from the apks: the permissions they request that carry the
+     privileged flag, counting the ones whose protectionLevel spells it the
+     old way as "system". Missing one takes system_server down at boot. -->
+<permissions>
+    <privapp-permissions package="com.android.camera">
+        <permission name="android.permission.DUMP" />
+        <permission name="android.permission.INTERACT_ACROSS_USERS" />
+        <permission name="android.permission.LOG_COMPAT_CHANGE" />
+        <permission name="android.permission.MANAGE_USB" />
+        <permission name="android.permission.READ_COMPAT_CHANGE_CONFIG" />
+        <permission name="android.permission.START_ACTIVITIES_FROM_BACKGROUND" />
+        <permission name="android.permission.SUBSCRIBE_TO_KEYGUARD_LOCKED_STATE" />
+        <permission name="android.permission.SYSTEM_CAMERA" />
+        <permission name="android.permission.TURN_SCREEN_ON" />
+        <permission name="android.permission.WRITE_MEDIA_STORAGE" />
+        <permission name="android.permission.WRITE_SECURE_SETTINGS" />
+    </privapp-permissions>
+
+    <privapp-permissions package="com.miui.extraphoto">
+        <permission name="android.permission.WRITE_MEDIA_STORAGE" />
+    </privapp-permissions>
+</permissions>

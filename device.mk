@@ -129,6 +129,16 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.camera.full.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.full.xml \
     frameworks/native/data/etc/android.hardware.camera.raw.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.raw.xml
 
+# MIUI Camera. The apks and jni libraries come from vendor/xiaomi/garnet; the
+# overlay supplies the strings the apk only carries in Chinese.
+PRODUCT_PACKAGES += \
+    MiuiCameraOverlayGarnet
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/permissions/privapp-permissions-miuicamera.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp-permissions-miuicamera.xml \
+    $(LOCAL_PATH)/configs/sysconfig/miuicamera-hiddenapi-package-allowlist.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/sysconfig/miuicamera-hiddenapi-package-allowlist.xml \
+    $(LOCAL_PATH)/configs/public.libraries-xiaomi.txt:$(TARGET_COPY_OUT_SYSTEM)/etc/public.libraries-xiaomi.txt
+
 # Display
 PRODUCT_PACKAGES += \
     android.hardware.graphics.mapper@4.0-impl-qti-display \
